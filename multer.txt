@@ -1,0 +1,34 @@
+    memory storge 
+multer-config
+    const multer = require('multer')
+    const storage = multer.memoryStorage();
+    const upload = multer({storage:storage})
+    module.exports=upload
+
+product router
+    const upload = require('../config/multer-config.js')
+    router.post('/create',upload.single('image'),function(req,res){
+    res.send(req.file)
+    });
+
+ejs
+<form action="/profile" method="post" enctype="multipart/form-data">
+  <input type="file" name="image" />
+</form>
+
+file storge
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Folder where files will be saved
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // Unique filename
+  }
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.single('myFile'), (req, res) => {
+  res.send('File uploaded successfully!');
+});
